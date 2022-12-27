@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "839066655057",
+    "project_id": "kml-store-app",
+    "storage_bucket": "kml-store-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:839066655057:android:05e1dcdf7ba036bc8cdb70",
+        "android_client_info": {
+          "package_name": "com.example.ecommerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "839066655057-i98skihhsb3s1cckfv4k3lc0v7n4ren6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB6CxMpMvirdM4vyO4m9s-ihgrHZ4w8SME"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "839066655057-i98skihhsb3s1cckfv4k3lc0v7n4ren6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
