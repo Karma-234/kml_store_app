@@ -52,7 +52,7 @@ class ProductList extends StatelessWidget {
               ),
               trailing: Text('\$${data[index]['price'].toString()}'),
               onTap: () {
-                moreDetails(
+                ctrl.moreDetails(
                   context,
                   data[index]['image'],
                   data[index]['title'],
@@ -68,114 +68,4 @@ class ProductList extends StatelessWidget {
       },
     );
   }
-}
-
-moreDetails(
-  BuildContext context,
-  String imgUrl,
-  String title,
-  String description,
-  String price,
-  DashCtrl ctrl,
-  dynamic prodId,
-) {
-  showBottomSheet(
-    enableDrag: true,
-    elevation: 30.0,
-    shape: RoundedRectangleBorder(
-      borderRadius: BorderRadius.only(
-        topLeft: Radius.circular(23.0.r),
-        topRight: Radius.circular(23.0.r),
-      ),
-    ),
-    context: context,
-    builder: (context) {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Image(
-            image: NetworkImage(imgUrl),
-            fit: BoxFit.fitWidth,
-            height: 90.0.h,
-          ),
-          Gap(15.0.h),
-          Padding(
-            padding: EdgeInsets.only(left: 23.0.w, right: 23.0.w),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                Text(
-                  title,
-                  textAlign: TextAlign.justify,
-                  style: GoogleFonts.inter(fontSize: 18.0.sp, height: 32 / 24),
-                ),
-                Gap(10.0.h),
-                Text(
-                  description,
-                  textAlign: TextAlign.justify,
-                  style: GoogleFonts.inter(fontSize: 12.0.sp, height: 18 / 12),
-                ),
-                Gap(10.0.h),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    Text(
-                      price,
-                      style: GoogleFonts.inter(fontSize: 23.0),
-                    ),
-                  ],
-                ),
-                Row(
-                  children: [
-                    CounterButton(
-                      icon: Icons.add,
-                      onPressd: () {
-                        ctrl.addQuantity(context);
-                      },
-                    ),
-                    Gap(10.0.w),
-                    Obx(
-                      () => Text(
-                        ctrl.quantity.value.toString(),
-                        textAlign: TextAlign.justify,
-                        style: GoogleFonts.inter(
-                            fontSize: 14.0.sp, height: 21 / 14),
-                      ),
-                    ),
-                    Gap(10.0.w),
-                    CounterButton(
-                      icon: FontAwesomeIcons.minus,
-                      onPressd: () {
-                        ctrl.reduceQuantity();
-                      },
-                    ),
-                  ],
-                ),
-                Gap(120.0.h),
-                ElevatedButton(
-                  onPressed: () async {
-                    ctrl.storeService
-                        .addProduct(
-                            prodId.toString(), ctrl.quantity.value.toString())
-                        .then((value) {
-                      ctrl.resetQuantity();
-                      Get.back();
-                    });
-                  },
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Add to cart'),
-                    ],
-                  ),
-                ),
-                Gap(15.0.h),
-              ],
-            ),
-          ),
-        ],
-      );
-    },
-  );
 }
