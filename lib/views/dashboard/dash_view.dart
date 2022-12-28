@@ -1,9 +1,15 @@
-import 'package:ecommerce_app/core/services/api/store_api/store_api.dart';
+import 'package:ecommerce_app/controllers/dash_controller.dart';
+import 'package:ecommerce_app/views/cart/cart_view.dart';
+
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
+
+import 'package:gap/gap.dart';
+import 'package:get/get.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
+import 'package:get/instance_manager.dart';
+
+import '../../widgets/exports.dart';
 
 class DashView extends StatefulWidget {
   DashView({super.key});
@@ -14,122 +20,54 @@ class DashView extends StatefulWidget {
 
 class _DashViewState extends State<DashView>
     with SingleTickerProviderStateMixin {
-  var getProducts = StoreApi();
+  var ctrl = Get.put(DashCtrl());
   late final tabCtrl = TabController(length: 5, vsync: this);
 
   @override
   Widget build(BuildContext context) {
+    var funcList = [
+      ctrl.storeService.getAllProducts(),
+      ctrl.storeService.getCategory('jewelery'),
+      ctrl.storeService.getCategory('men\'s clothing'),
+      ctrl.storeService.getCategory('women\'s clothing'),
+      ctrl.storeService.getCategory('electronics'),
+    ];
     return Scaffold(
       appBar: AppBar(
-        title: Text(''),
+        title: const Text('Home'),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.settings),
+          ),
+          IconButton(
+            onPressed: () {
+              Get.to(CartView());
+            },
+            icon: const Icon(Icons.shopping_cart_outlined),
+          ),
+        ],
       ),
       drawer: const Drawer(),
       body: Column(
         children: [
-          TabBar(
-            labelStyle: GoogleFonts.inter(fontSize: 14.0),
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.blueGrey,
-            controller: tabCtrl,
-            tabs: const [
-              Tab(
-                text: 'All Products',
-              ),
-              Tab(
-                text: 'Jewelery',
-              ),
-              Tab(
-                text: 'Men\'s Clothing',
-              ),
-              Tab(
-                text: 'Women\'s Clothing',
-              ),
-              Tab(
-                text: 'Electronics',
-              ),
-            ],
+          KTabBar(
+            tabCtrl: tabCtrl,
+            ontap: (value) {
+              ctrl.setInt(value);
+            },
           ),
+          Gap(15.0.h),
           Expanded(
-            child: TabBarView(
-              viewportFraction: 1,
-              controller: tabCtrl,
-              children: [
-                ProductList(stream: getProducts.getAllProducts().asStream()),
-                ProductList(
-                    stream: getProducts.getCategory('jewelery').asStream()),
-                ProductList(
-                    stream:
-                        getProducts.getCategory('men\'s clothing').asStream()),
-                ProductList(
-                    stream: getProducts
-                        .getCategory('women\'s clothing')
-                        .asStream()),
-                ProductList(
-                    stream: getProducts.getCategory('electronics').asStream()),
-              ],
+            child: Obx(
+              () => ProductList(
+                stream: funcList[ctrl.index.value].asStream(),
+              ),
             ),
           ),
         ],
       ),
-    );
-  }
-}
-
-class ProductList extends StatelessWidget {
-  const ProductList({
-    super.key,
-    required this.stream,
-  });
-  final Stream<dynamic>? stream;
-  @override
-  Widget build(BuildContext context) {
-    return StreamBuilder(
-      stream: stream,
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return const Center(child: CircularProgressIndicator());
-        }
-        var data = snapshot.data!;
-        return ListView.separated(
-          itemCount: data.length,
-          separatorBuilder: (context, index) {
-            return const Divider();
-          },
-          itemBuilder: (context, index) {
-            return ListTile(
-              dense: true,
-              leading: data[index]['image'] == null
-                  ? const CircleAvatar()
-                  : Image(
-                      image: NetworkImage(data[index]['image']),
-                      width: 59.0.w,
-                    ),
-              title: Text(data[index]['title'].toString()),
-              subtitle: Text(
-                data[index]['description'].toString(),
-                textAlign: TextAlign.justify,
-                overflow: TextOverflow.ellipsis,
-                maxLines: 2,
-                style: GoogleFonts.inter(),
-              ),
-              trailing: Text('\$${data[index]['price'].toString()}'),
-              onTap: () {
-                showBottomSheet(
-                  context: context,
-                  builder: (context) {
-                    return DraggableScrollableSheet(
-                      builder: (context, scrollController) {
-                        return Column();
-                      },
-                    );
-                  },
-                );
-              },
-            );
-          },
-        );
-      },
     );
   }
 }

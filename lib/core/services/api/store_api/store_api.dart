@@ -27,4 +27,28 @@ class StoreApi {
       }
     });
   }
+
+  Future getUserCart(String userId) async {
+    return await http
+        .get(Uri.parse('${AppConstants.storeUrl}carts/user/$userId'),
+            headers: AppConstants.headers)
+        .then((value) {
+      if (value.statusCode == 200) {
+        var products = jsonDecode(value.body);
+        return products;
+      }
+    });
+  }
+
+  Future addProduct(String prodId, String quantity) async {
+    return await http.post(Uri.parse('${AppConstants.storeUrl}carts'),
+        headers: AppConstants.headers,
+        body: jsonEncode({
+          'userId': 1,
+          'date': DateTime.now().toIso8601String(),
+          'products': [
+            {'quantity': quantity, 'productId': prodId}
+          ]
+        }));
+  }
 }
