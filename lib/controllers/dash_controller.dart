@@ -152,6 +152,7 @@ class DashCtrl extends GetxController {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: const [
                         Text('Add to cart'),
+                        Icon(Icons.shopping_cart)
                       ],
                     ),
                   ),
