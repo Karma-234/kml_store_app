@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:ecommerce_app/controllers/dash_controller.dart';
+import 'package:ecommerce_app/core/model/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -22,6 +25,7 @@ class ProductList extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
         var data = snapshot.data!;
+
         return ListView.separated(
           itemCount: data.length,
           separatorBuilder: (context, index) {
@@ -48,12 +52,14 @@ class ProductList extends StatelessWidget {
               onTap: () {
                 ctrl.moreDetails(
                   context,
-                  data[index]['image'],
-                  data[index]['title'],
-                  data[index]['description'],
-                  '\$${data[index]['price'].toString()}',
                   ctrl,
-                  data[index]['id'],
+                  ProductModel(
+                    title: data[index]['title'],
+                    imgUrl: data[index]['image'],
+                    description: data[index]['description'],
+                    price: '\$${data[index]['price'].toString()}',
+                    id: data[index]['id'].toString(),
+                  ),
                 );
               },
             );

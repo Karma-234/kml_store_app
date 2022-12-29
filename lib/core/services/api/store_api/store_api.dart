@@ -1,6 +1,6 @@
 import 'dart:convert';
-
 import 'package:ecommerce_app/core/constants/App_const.dart';
+import 'package:ecommerce_app/core/model/product_model.dart';
 import 'package:http/http.dart' as http;
 
 class StoreApi {
@@ -11,6 +11,7 @@ class StoreApi {
         .then((value) {
       if (value.statusCode == 200) {
         var products = jsonDecode(value.body);
+
         return products;
       }
     });
@@ -40,15 +41,28 @@ class StoreApi {
     });
   }
 
-  Future addProduct(String prodId, String quantity) async {
-    return await http.post(Uri.parse('${AppConstants.storeUrl}carts'),
-        headers: AppConstants.headers,
-        body: jsonEncode({
+  Future addProduct(ProductModel model) async {
+    return await http.post(
+      Uri.parse('${AppConstants.storeUrl}carts'),
+      headers: AppConstants.headers,
+      body: jsonEncode(
+        {
           'userId': 1,
           'date': DateTime.now().toIso8601String(),
           'products': [
-            {'quantity': quantity, 'productId': prodId}
+            {
+              'quantity': model.quantity,
+              'productId': model.id,
+              'title': model.title,
+            }
           ]
-        }));
+        },
+      ),
+    );
+  }
+
+  Future deletCart() async {
+    await http.delete(Uri.parse('${AppConstants.storeUrl}carts/user/1'),
+        headers: AppConstants.headers);
   }
 }

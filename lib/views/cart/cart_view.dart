@@ -1,14 +1,14 @@
+import 'package:ecommerce_app/controllers/cart_controller.dart';
 import 'package:ecommerce_app/core/services/api/store_api/store_api.dart';
 import 'package:ecommerce_app/widgets/exports.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 
 class CartView extends StatelessWidget {
   CartView({super.key});
   var getCart = StoreApi();
+  var ctrl = CartCtrl();
 
   @override
   Widget build(BuildContext context) {
@@ -47,14 +47,18 @@ class CartView extends StatelessWidget {
                 AppButton(
                   title: 'Checkout',
                   icon: Icons.shopping_cart_checkout,
-                  onClick: () {},
+                  onClick: () async {
+                    ctrl.checkOut(context);
+                  },
                 ),
                 Gap(16.0.h),
                 AppButton(
                   title: 'Clear cart',
                   color: Colors.red,
                   icon: Icons.remove_shopping_cart_rounded,
-                  onClick: () {},
+                  onClick: () async {
+                    ctrl.clearCart(context);
+                  },
                 ),
                 Gap(30.0.h),
               ],

@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/core/services/api/store_api/store_api.dart';
+import 'package:ecommerce_app/core/exports.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,6 +9,7 @@ import '../views/dashboard/reusable_widgets/selected_item_scaffold.dart';
 class DashCtrl extends GetxController {
   static DashCtrl get find => Get.find();
   final storeService = StoreApi();
+  ProductModel productModel = ProductModel();
   RxInt index = 0.obs;
   RxInt quantity = 1.obs;
   setInt(int newIndex) {
@@ -46,8 +47,7 @@ class DashCtrl extends GetxController {
     quantity.value = 1;
   }
 
-  moreDetails(BuildContext context, String imgUrl, String title,
-      String description, String price, DashCtrl ctrl, dynamic prodId) {
+  moreDetails(BuildContext context, DashCtrl ctrl, ProductModel productModel) {
     showBottomSheet(
       enableDrag: false,
       elevation: 30.0,
@@ -60,22 +60,23 @@ class DashCtrl extends GetxController {
       context: context,
       builder: (context) {
         return SelectedItemScaffold(
-          description: description,
-          price: price,
-          imgUrl: imgUrl,
-          title: title,
+          description: productModel.description!,
+          price: productModel.price!,
+          imgUrl: productModel.imgUrl!,
+          title: productModel.title!,
           ctrl: ctrl,
-          prodId: prodId,
+          prodId: productModel.id!,
           addToCart: () async {
+            productModel.quantity = ctrl.quantity.value.toString();
             await ctrl.storeService
-                .addProduct(prodId.toString(), ctrl.quantity.value.toString());
-            ctrl.resetQuantity();
+                .addProduct(productModel)
+                .then((value) => ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Item added to cart successfully!'),
+                      ),
+                    ));
 
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(
-                content: Text('Item added to cart successfully!'),
-              ),
-            );
+            ctrl.resetQuantity();
             Get.back();
           },
         );
