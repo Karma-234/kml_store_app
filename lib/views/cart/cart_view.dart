@@ -1,4 +1,5 @@
 import 'package:ecommerce_app/core/services/api/store_api/store_api.dart';
+import 'package:ecommerce_app/widgets/exports.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/widgets/container.dart';
 import 'package:flutter/src/widgets/framework.dart';
@@ -43,15 +44,17 @@ class CartView extends StatelessWidget {
                       itemCount: data.length),
                 ),
                 const Spacer(),
-                ElevatedButton(
-                  onPressed: () {},
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: const [
-                      Text('Clear cart'),
-                    ],
-                  ),
+                AppButton(
+                  title: 'Checkout',
+                  icon: Icons.shopping_cart_checkout,
+                  onClick: () {},
+                ),
+                Gap(16.0.h),
+                AppButton(
+                  title: 'Clear cart',
+                  color: Colors.red,
+                  icon: Icons.remove_shopping_cart_rounded,
+                  onClick: () {},
                 ),
                 Gap(30.0.h),
               ],

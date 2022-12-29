@@ -6,16 +6,17 @@ import 'package:google_fonts/google_fonts.dart';
 
 import 'counter_button.dart';
 
-class QuantButtton extends StatelessWidget {
-  const QuantButtton({
-    super.key,
-    this.onMinus,
-    this.onadd,
-    required this.value,
-  });
-  final dynamic Function()? onadd;
-  final dynamic Function()? onMinus;
-  final String value;
+class QuantityButton extends StatelessWidget {
+  const QuantityButton({
+    Key? key,
+    this.addItem,
+    this.removeItem,
+    required this.itemCount,
+  }) : super(key: key);
+
+  final dynamic Function()? addItem;
+  final dynamic Function()? removeItem;
+  final String itemCount;
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +24,18 @@ class QuantButtton extends StatelessWidget {
       children: [
         CounterButton(
           icon: Icons.add,
-          onPressd: onadd,
+          onPressd: addItem,
         ),
         Gap(10.0.w),
         Text(
-          value,
+          itemCount,
           textAlign: TextAlign.justify,
           style: GoogleFonts.inter(fontSize: 14.0.sp, height: 21 / 14),
         ),
         Gap(10.0.w),
         CounterButton(
           icon: FontAwesomeIcons.minus,
-          onPressd: onMinus,
+          onPressd: removeItem,
         ),
       ],
     );
